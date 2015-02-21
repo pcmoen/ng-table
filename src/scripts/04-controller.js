@@ -81,11 +81,15 @@ function($scope, NgTableParams, $timeout, $parse, $compile, $attrs, $element, ng
                 'ng-table-pagination': 'params',
                 'template-url': 'templates.pagination'
             });
-            $element.after(paginationTemplate);
+            if (!angular.isDefined($attrs.noPagination)) {
+                $element.after(paginationTemplate);
+            }
             if (headerTemplate) {
                 $compile(headerTemplate)($scope);
             }
-            $compile(paginationTemplate)($scope);
+            if (!angular.isDefined($attrs.noPagination)) {
+                $compile(paginationTemplate)($scope);
+            }
         }
     };
 
