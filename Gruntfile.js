@@ -1,7 +1,7 @@
-var mountFolder = function (connect, dir) {
+var mountFolder = function(connect, dir) {
     return connect.static(require('path').resolve(dir));
 };
-module.exports = function (grunt) {
+module.exports = function(grunt) {
 
     require('load-grunt-tasks')(grunt);
 
@@ -17,7 +17,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('default', [
         'dev',
-        'uglify',
+    'uglify',
         'cssmin'
     ]);
 
@@ -33,12 +33,10 @@ module.exports = function (grunt) {
         },
         copy: {
             styles: {
-                files: [
-                    {
-                        src: './src/styles/ng-table.less',
-                        dest: './dist/ng-table.less'
-                    }
-                ]
+                files: [{
+                    src: './src/styles/ng-table.less',
+                    dest: './dist/ng-table.less'
+                }]
             }
         },
         uglify: {
@@ -47,23 +45,32 @@ module.exports = function (grunt) {
                 dest: './dist/ng-table.min.js',
                 options: {
                     banner: '<%= banner %>',
-                    sourceMap: function (fileName) {
-                        return fileName.replace(/$/, '.map');
-                    }
+                    sourceMap: true
                 }
             }
         },
         concat: {
             js: {
                 src: [
-                    'src/scripts/01-*.js',
-                    'src/scripts/02-*.js',
-                    'src/scripts/03-*.js',
-                    'src/scripts/04-*.js',
-                    'src/scripts/05-*.js',
-                    'src/scripts/06-*.js',
+                    'src/scripts/intro.js',
+                    'src/scripts/ngTable.module.js',
+                    'src/scripts/ngTableDefaults.js',
+                    'src/scripts/ngTableEventsChannel.js',
+                    'src/scripts/ngTableFilterConfig.js',
+                    'src/scripts/ngTableDefaultGetData.js',
+                    'src/scripts/ngTableGetDataBcShim.js',
+                    'src/scripts/ngTableColumn.js',
+                    'src/scripts/ngTableParams.js',
+                    'src/scripts/ngTableController.js',
+                    'src/scripts/ngTable.directive.js',
+                    'src/scripts/ngTableDynamic.directive.js',
+                    'src/scripts/ngTablePagination.directive.js',
+                    'src/scripts/ngTableFilterRowController.js',
+                    'src/scripts/ngTableFilterRow.directive.js',
+                    'src/scripts/ngTableSorterRowController.js',
+                    'src/scripts/ngTableSorterRow.directive.js',
                     './.temp/scripts/views.js',
-                    'src/scripts/07-*.js'
+                    'src/scripts/outro.js'
                 ],
                 dest: './dist/ng-table.js'
             }
@@ -115,7 +122,7 @@ module.exports = function (grunt) {
             },
             serve: {
                 options: {
-                    middleware: function (connect) {
+                    middleware: function(connect) {
                         return [
                             mountFolder(connect, '.')
                         ];

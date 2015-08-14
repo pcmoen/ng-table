@@ -12,7 +12,7 @@
         <!--[if lt IE 9]>
         <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
         <![endif]-->
-        <script src="js/angular.min.js"></script>
+        <script src="../bower_components/angular/angular.js"></script>
         <script src="../dist/ng-table.js"></script>
         <link rel="stylesheet" href="../dist/ng-table.css">
     </head>
@@ -29,7 +29,7 @@
                 <td data-title="'Name'" filter="{ 'name': 'text' }">
                     {{user.name}}
                 </td>
-                <td data-title="'Age'">
+                <td data-title="'Age'" filter="{ 'age': 'number' }">
                     {{user.age}}
                 </td>
             </tr>
@@ -63,18 +63,7 @@
                     name: 'M'       // initial filter
                 }
             }, {
-                total: data.length, // length of data
-                getData: function($defer, params) {
-                    // use build-in angular filter
-                    var orderedData = params.filter() ?
-                           $filter('filter')(data, params.filter()) :
-                           data;
-
-                    $scope.users = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
-
-                    params.total(orderedData.length); // set total for recalc pagination
-                    $defer.resolve($scope.users);
-                }
+                data: data
             });
         })
         </script>

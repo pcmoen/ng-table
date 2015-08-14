@@ -14,7 +14,7 @@
 
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="js/angular.min.js"></script>
+    <script src="../bower_components/angular/angular.js"></script>
     <script src="../dist/ng-table.js"></script>
     <link rel="stylesheet" href="../dist/ng-table.css">
 
@@ -77,10 +77,10 @@
 
     <table ng-table="tableParams" show-filter="true" class="table table-bordered table-striped">
         <tr ng-repeat="user in $data">
-            <td data-title="'Name'" sortable="'name'" filter="{ 'name': 'text' }">
+            <td title="'Full Name'" title-alt="'Name'" sortable="'name'" filter="{ 'name': 'text' }">
                 {{user.name}}
             </td>
-            <td data-title="'Age'" sortable="'age'" filter="{ 'age': 'text' }">
+            <td title="'Age'" sortable="'age'" filter="{ 'age': 'text' }">
                 {{user.age}}
             </td>
         </tr>
@@ -124,7 +124,7 @@
                     filterDelay: 0,
                     total: data.length, // length of data
                     getData: function ($defer, params) {
-                        // use build-in angular filter
+                        // use built-in angular filter
                         var filteredData = params.filter() ?
                                 $filter('filter')(data, params.filter()) :
                                 data;

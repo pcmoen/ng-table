@@ -13,7 +13,7 @@
         <!--[if lt IE 9]>
         <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
         <![endif]-->
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.9/angular.min.js"></script>
+        <script src="../bower_components/angular/angular.js"></script>
         <script src="../dist/ng-table.js"></script>
         <link rel="stylesheet" href="../dist/ng-table.css">
     </head>
@@ -25,12 +25,16 @@
 
 		<h2>Dataset: <select ng-model="dataset" ng-options="ds for ds in datasets"></select></h2>
 
-        <table ng-table="tableParams" class="table">
+        <table ng-table="tableParams" class="table" show-filter="true">
+            <colgroup>
+                <col width="50%"/>
+                <col width="50%"/>
+            </colgroup>
             <tr ng-repeat="user in $data">
-                <td data-title="'Name'" sortable="'name'">
-                    {{user.name}}
+                <td data-title="'Name'" sortable="'name'" filter="nameFilter">
+                    {{user.name + ' ' + user.surname }}
                 </td>
-                <td data-title="'Age'" sortable="'age'">
+                <td data-title="'Age'" sortable="'age'" filter="{age: 'text'}">
                     {{user.age}}
                 </td>
             </tr>
@@ -40,79 +44,31 @@
         var app = angular.module('main', ['ngTable']).
 
         controller('DemoCtrl', function($interval, $http, $scope, $filter, NgTableParams) {
-			$scope.datasets = ["1","2", "3"];
+			$scope.datasets = ["1","2"];
 			$scope.dataset = "1";
             var self = this;
-            self.data1 = [{name: "One", age: 50},
-                        {name: "Two", age: 43},
-                        {name: "Three", age: 27},
-                        {name: "Four", age: 29},
-                        {name: "Five", age: 34},
-                        {name: "Six", age: 43},
-                        {name: "Seven", age: 27},
-                        {name: "Eight", age: 29},
-                        {name: "Nine", age: 34},
-                        {name: "Ten", age: 43},
-                        {name: "Eleven", age: 27},
-                        {name: "Twelve", age: 29},
-                        {name: "Thirteen", age: 34},
-                        {name: "Fourteen", age: 43},
-                        {name: "Fifteen", age: 27},
-                        {name: "Sixteen", age: 29}];
+            self.data1 = [{"name":"Lee","surname":"Gilmore","age":38},{"name":"Murphy","surname":"Cabrera","age":71},{"name":"Montana","surname":"Austin","age":68},{"name":"Phoebe","surname":"Wells","age":8},{"name":"Abra","surname":"Gay","age":32},{"name":"Brynne","surname":"Conley","age":69},{"name":"Baxter","surname":"Murphy","age":77},{"name":"Hilda","surname":"Nelson","age":39},{"name":"Leila","surname":"Perkins","age":96},{"name":"Micah","surname":"Herring","age":4},{"name":"Jeremy","surname":"Sosa","age":97},{"name":"Orson","surname":"Moore","age":99}];
 
-			self.data2 = [{name: "Jacob", age: 50},
-                        {name: "Jacob", age: 43},
-                        {name: "Jacob", age: 27},
-                        {name: "Nephi", age: 29},
-                        {name: "Enos", age: 34},
-                        {name: "Tiancum", age: 43},
-                        {name: "Jacob", age: 27},
-                        {name: "Nephi", age: 29},
-                        {name: "Enos", age: 34},
-                        {name: "Tiancum", age: 43},
-                        {name: "Jacob", age: 27},
-                        {name: "Nephi", age: 29},
-                        {name: "Enos", age: 34},
-                        {name: "Tiancum", age: 43},
-                        {name: "Jacob", age: 27},
-                        {name: "Nephi", age: 29},
-                        {name: "Enos", age: 34}];
+			self.data2 = {"name":"Vance","surname":"Santana","age":93},{"name":"Jenna","surname":"Castaneda","age":82},{"name":"Tanisha","surname":"Alexander","age":97},{"name":"Guy","surname":"Salazar","age":3},{"name":"Karina","surname":"Buchanan","age":62},{"name":"Josephine","surname":"Clayton","age":53},{"name":"Armand","surname":"Lucas","age":69},{"name":"Seth","surname":"Herring","age":5},{"name":"Clarke","surname":"Horton","age":11},{"name":"Mallory","surname":"Armstrong","age":60},{"name":"Ryan","surname":"Gay","age":12},{"name":"Pamela","surname":"Greer","age":41},{"name":"Christen","surname":"White","age":88},{"name":"Malik","surname":"Ray","age":79},{"name":"Steel","surname":"Foley","age":14},{"name":"Louis","surname":"Diaz","age":12};
 
-            self.data3 = [];
-
-            $interval(function() {
-                $http.jsonp("http://www.filltext.com/?callback=JSON_CALLBACK&rows=5&name={firstName}&age={number|80}")
-                .success(function (data) {
-                    self.data3 = data;
-                    // $scope.tableParams.reload();
-                });
-            }, 5000);
-
-			var getData = function() {
-				return self['data' + $scope.dataset]; 
-			};
+            $scope.nameFilter = {
+                name: { id: 'text', placeholder: 'First Name' },
+                surname: { id: 'text', placeholder: 'Surname' }
+            };
 
 			$scope.$watch("dataset", function () {
-				$scope.tableParams.reload();
+				$scope.tableParams.settings({ data: self["data" + $scope.dataset]});
 			});
 
             $scope.tableParams = new NgTableParams({
                 page: 1,            // show first page
                 count: 10,          // count per page
                 sorting: {
-                    name: 'asc'     // initial sorting
+                    name: 'asc'     // initial sorting,
                 }
             }, {
-                total: function () { return getData().length; }, // length of data
-                getData: function($defer, params) {
-                    var filteredData = getData();
-                    var orderedData = params.sorting() ?
-                                        $filter('orderBy')(filteredData, params.orderBy()) :
-                                        filteredData;
-
-                    $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-                },
-				$scope: { $data: {} }
+                data: self["data" + $scope.dataset],
+                filterLayout: 'horizontal'
             });
         })
         </script>

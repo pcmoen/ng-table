@@ -13,7 +13,7 @@
         <!--[if lt IE 9]>
         <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
         <![endif]-->
-        <script src="js/angular.min.js"></script>
+        <script src="../bower_components/angular/angular.js"></script>
         <script src="../dist/ng-table.js"></script>
         <link rel="stylesheet" href="../dist/ng-table.css">
     </head>
@@ -22,8 +22,8 @@
 
 <div ng-controller="DemoCtrl">
 
-    <p><strong>Page:</strong> {{tableParams.page()}}
-    <p><strong>Count per page:</strong> {{tableParams.count()}}
+    <p><strong>Page:</strong> {{tableParams.page()}}</p>
+    <p><strong>Count per page:</strong> {{tableParams.count()}}</p>
 
 
         <table ng-table="tableParams" class="table ng-table-responsive">
